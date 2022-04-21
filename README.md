@@ -22,6 +22,6 @@ CODEFRAGMENT_EMIT_EVEN_RECORDS=" if record_proto.record_num %2 == 0: to_emit = T
 python filter_records.py --exec "$CODEFRAGMENT_EMIT_EVEN_RECORDS" --input_filename ./test_data/output/sixel-nixel-testdata.actual.jsonlines --output_filename ./test_data/output/sixel-nixel-testdata.filtered-even.jsonlines
 
 # filter textproto records
-python filter_records.py --exec "$FILTER_FRAGMENT" --input_filename ./test_data/output/sixel-nixel-testdata.actual.textprotolines --output_filename ./test_data/output/sixel-nixel-testdata.filtered-even.textprotolines --input_mode textproto --output_mode textproto
+python filter_records.py --exec "$CODEFRAGMENT_EMIT_EVEN_RECORDS" --input_filename ./test_data/output/sixel-nixel-testdata.actual.textprotolines --output_filename ./test_data/output/sixel-nixel-testdata.filtered-even.textprotolines --input_mode textproto --output_mode textproto
 
 ```
