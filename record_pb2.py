@@ -17,10 +17,10 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='record.proto',
   package='',
-  syntax='proto3',
+  syntax='proto2',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0crecord.proto\"\x1c\n\x07\x41\x64\x64ress\x12\x11\n\traw_lines\x18\x01 \x03(\t\"s\n\x06\x44\x65\x62tor\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06lex_id\x18\x02 \x01(\t\x12\x19\n\x07\x61\x64\x64ress\x18\x03 \x01(\x0b\x32\x08.Address\x12\x16\n\x0eparsed_surname\x18\x04 \x01(\t\x12\x18\n\x10parsed_forenames\x18\x05 \x01(\t\"\x18\n\x08\x43reditor\x12\x0c\n\x04name\x18\x01 \x01(\t\"j\n\x0f\x46ilingComponent\x12\x10\n\x08\x63\x61tegory\x18\x01 \x01(\t\x12\x15\n\rfiling_number\x18\x02 \x01(\t\x12\x17\n\x0fraw_filing_date\x18\x03 \x01(\t\x12\x15\n\rfiling_office\x18\x04 \x01(\t\"\x8b\x01\n\nFilingInfo\x12\x17\n\x0fraw_filing_date\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\t\x12\x12\n\namount_usd\x18\x05 \x01(\x05\x12\x1a\n\x12\x63\x65rtificate_number\x18\x03 \x01(\t\x12$\n\ncomponents\x18\x04 \x03(\x0b\x32\x10.FilingComponent\"\x8a\x01\n\x06Record\x12\x12\n\nrecord_num\x18\x01 \x01(\x05\x12\x13\n\x0bsequence_no\x18\x05 \x01(\x05\x12\x18\n\x07\x64\x65\x62tors\x18\x02 \x03(\x0b\x32\x07.Debtor\x12 \n\x0b\x66iling_info\x18\x03 \x01(\x0b\x32\x0b.FilingInfo\x12\x1b\n\x08\x63reditor\x18\x04 \x01(\x0b\x32\t.Creditor\",\n\x10RecordCollection\x12\x18\n\x07records\x18\x01 \x03(\x0b\x32\x07.Record*o\n\nColumnType\x12\x1b\n\x17\x43OLUMN_TYPE_UNSPECIFIED\x10\x00\x12\x11\n\rRECORD_NUMBER\x10\x01\x12\n\n\x06\x44\x45\x42TOR\x10\x02\x12\x0b\n\x07\x41\x44\x44RESS\x10\x03\x12\n\n\x06\x46ILING\x10\x04\x12\x0c\n\x08\x43REDITOR\x10\x05\x62\x06proto3'
+  serialized_pb=b'\n\x0crecord.proto\"\x1c\n\x07\x41\x64\x64ress\x12\x11\n\traw_lines\x18\x01 \x03(\t\"s\n\x06\x44\x65\x62tor\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06lex_id\x18\x02 \x01(\t\x12\x19\n\x07\x61\x64\x64ress\x18\x03 \x01(\x0b\x32\x08.Address\x12\x16\n\x0eparsed_surname\x18\x04 \x01(\t\x12\x18\n\x10parsed_forenames\x18\x05 \x01(\t\"\x18\n\x08\x43reditor\x12\x0c\n\x04name\x18\x01 \x01(\t\"j\n\x0f\x46ilingComponent\x12\x10\n\x08\x63\x61tegory\x18\x01 \x01(\t\x12\x15\n\rfiling_number\x18\x02 \x01(\t\x12\x17\n\x0fraw_filing_date\x18\x03 \x01(\t\x12\x15\n\rfiling_office\x18\x04 \x01(\t\"\x8b\x01\n\nFilingInfo\x12\x17\n\x0fraw_filing_date\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\t\x12\x12\n\namount_usd\x18\x05 \x01(\x05\x12\x1a\n\x12\x63\x65rtificate_number\x18\x03 \x01(\t\x12$\n\ncomponents\x18\x04 \x03(\x0b\x32\x10.FilingComponent\"\x8a\x01\n\x06Record\x12\x12\n\nrecord_num\x18\x01 \x01(\x05\x12\x13\n\x0bsequence_no\x18\x05 \x01(\x05\x12\x18\n\x07\x64\x65\x62tors\x18\x02 \x03(\x0b\x32\x07.Debtor\x12 \n\x0b\x66iling_info\x18\x03 \x01(\x0b\x32\x0b.FilingInfo\x12\x1b\n\x08\x63reditor\x18\x04 \x01(\x0b\x32\t.Creditor\",\n\x10RecordCollection\x12\x18\n\x07records\x18\x01 \x03(\x0b\x32\x07.Record*o\n\nColumnType\x12\x1b\n\x17\x43OLUMN_TYPE_UNSPECIFIED\x10\x00\x12\x11\n\rRECORD_NUMBER\x10\x01\x12\n\n\x06\x44\x45\x42TOR\x10\x02\x12\x0b\n\x07\x41\x44\x44RESS\x10\x03\x12\n\n\x06\x46ILING\x10\x04\x12\x0c\n\x08\x43REDITOR\x10\x05'
 )
 
 _COLUMNTYPE = _descriptor.EnumDescriptor(
@@ -101,7 +101,7 @@ _ADDRESS = _descriptor.Descriptor(
   ],
   serialized_options=None,
   is_extendable=False,
-  syntax='proto3',
+  syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
@@ -161,7 +161,7 @@ _DEBTOR = _descriptor.Descriptor(
   ],
   serialized_options=None,
   is_extendable=False,
-  syntax='proto3',
+  syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
@@ -193,7 +193,7 @@ _CREDITOR = _descriptor.Descriptor(
   ],
   serialized_options=None,
   is_extendable=False,
-  syntax='proto3',
+  syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
@@ -246,7 +246,7 @@ _FILINGCOMPONENT = _descriptor.Descriptor(
   ],
   serialized_options=None,
   is_extendable=False,
-  syntax='proto3',
+  syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
@@ -306,7 +306,7 @@ _FILINGINFO = _descriptor.Descriptor(
   ],
   serialized_options=None,
   is_extendable=False,
-  syntax='proto3',
+  syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
@@ -366,7 +366,7 @@ _RECORD = _descriptor.Descriptor(
   ],
   serialized_options=None,
   is_extendable=False,
-  syntax='proto3',
+  syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
@@ -398,7 +398,7 @@ _RECORDCOLLECTION = _descriptor.Descriptor(
   ],
   serialized_options=None,
   is_extendable=False,
-  syntax='proto3',
+  syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
