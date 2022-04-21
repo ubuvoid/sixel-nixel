@@ -8,8 +8,8 @@ import google.protobuf.text_format as text_format
 
 # usage:
 # filter_records.py --exec EXEC
-#                   [--input_mode {textprotolines,jsonlines,pblines}]
-#                   [--output_mode {textprotolines,jsonlines,pblines}]
+#                   [--input_mode {textproto,json}]
+#                   [--output_mode {textproto,json}]
 #                   [--input_filename INPUT_FILENAME]
 #                   [--output_filename OUTPUT_FILENAME]
 
@@ -19,7 +19,8 @@ import google.protobuf.text_format as text_format
 #
 # Do *NOT* write to stdout in EXEC.
 #
-# By default, reads textprotolines from stdio and writes to stdout.
+# By default, reads json records from stdio, one record per line, and writes to
+# stdout.
 #
 # If input_filename is supplied, reads input from that file instead.
 # If output_filename is supplied, writes to that file instead.
@@ -35,12 +36,10 @@ def eprint(*args, **kwargs):
 
 def line_to_recordproto(line, input_mode):
     record_proto = record_pb2.Record()
-    if input_mode == "textprotolines":
+    if input_mode == "textproto":
         text_format.Parse(line, record_proto) 
-    elif input_mode == "jsonlines":
+    elif input_mode == "json":
         json_format.Parse(line, record_proto)
-    elif input_mode == "pblines":
-        record_proto.ParseFromString(line)
     else:
         eprint("Unrecognized input format")
         return None
@@ -70,8 +69,19 @@ def filter_lines(instream, outstream, input_mode, output_mode, args):
         # whether this line should be included in the output.
 
         if exec_locals['to_emit']:
-            # emit the same line that was supplied, rather than
-            # re-serializing, to preserve human-readable formatting.
+            line = ""
+
+            if output_mode == "textproto":
+                line = text_format.MessageToString(
+                        record_proto, as_one_line=True)
+            elif output_mode == "json":
+                line = json_format.MessageToJson(
+                        record_proto, indent=None,
+                        preserving_proto_field_name=True)
+            else:
+                eprint("!!! unexpected output_mode: " + output_mode)
+                return
+
             outstream.write(line)
             outstream.write("\n")
 
@@ -84,20 +94,18 @@ if __name__ == "__main__":
 
     parser.add_argument("--input_mode", type=str,
             choices=[
-                "textprotolines",
-                "jsonlines",
-                "pblines"
+                "textproto",
+                "json"
             ],
             help="format of input records. expects one record per line, in "
-            + "the specified format (text_format proto, serialized proto). "
-            + "default: textprotolines",
-            default="textprotolines")
+            + "the specified format (json, textproto). "
+            + "default: json",
+            default="json")
 
     parser.add_argument("--output_mode", type=str,
             choices=[
-                "textprotolines",
-                "jsonlines",
-                "pblines"
+                "textproto",
+                "json"
             ],
             help="if supplied, format to emit output records in. defaults to "
             + "the value of input_mode.")

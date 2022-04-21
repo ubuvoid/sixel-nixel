@@ -1,9 +1,10 @@
-# flattened_to_proto.py
+# flattened_to_record.py
 
 import argparse
 import re
 import record_pb2
 from record_pb2 import ColumnType as ColumnType
+import google.protobuf.json_format as json_format
 import google.protobuf.text_format as text_format
 
 sentinel_linemarker = "\\n"
@@ -305,25 +306,39 @@ def line_to_recordproto(recordline):
     # if we're here, the proto is now fully assembled.
     return record_proto
 
-def convert_stream(instream, outstream):
+def convert_stream(instream, outstream, output_mode):
+    if output_mode not in ( "textproto", "json" ):
+        eprint("Unrecognized output format")
+        return None
+
     while True:
         line = instream.readline()
         if not line:
             break  # end of file.
+        # generate the proper representation based on output_mode:
         record_proto = line_to_recordproto(line)
-        record_textproto = text_format.MessageToString(
-                record_proto, as_one_line=True, as_utf8=True)
-        outstream.write(record_textproto)
+        record_formatted = ""
+
+        if output_mode == "textproto":
+            record_formatted = text_format.MessageToString(
+                    record_proto, as_one_line=True)
+        elif output_mode == "json":
+            record_formatted = json_format.MessageToJson(
+                    record_proto, indent=None,
+                    preserving_proto_field_name=True)
+
+        # now write it out:
+        outstream.write(record_formatted)
         outstream.write("\n")
 
     # if we're here, all the lines have been converted. ok to return.
 
 
-def convert_flattened_file(input_filename, output_filename):
+def convert_flattened_file(input_filename, output_filename, output_mode):
     infile = open(input_filename, 'r')
     outfile = open(output_filename, 'w')
 
-    convert_stream(infile, outfile)
+    convert_stream(infile, outfile, output_mode)
 
     outfile.close()
     infile.close()
@@ -331,12 +346,29 @@ def convert_flattened_file(input_filename, output_filename):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="flattened_to_proto")
+
     parser.add_argument("input_filename", type=str,
             help="filename of flattened l-n query text result (one record per "
             + "line, with escaped newlines).")
+
     parser.add_argument("output_filename", type=str,
-            help="filename to write a file where each line is a text-format "
-            + "protocol buffer representing the corresponding record.")
+            help="filename to write a file where each line is a serialized "
+            + "representation of an input record (json by default).")
+
+    parser.add_argument("--output_mode", type=str,
+            choices=[
+                "textproto",
+                "json"
+            ],
+            help="format of output records. expects one record per line, in "
+            + "the specified format (json, textproto). "
+            + "default: json",
+            default="json")
+
     args = parser.parse_args()
 
-    convert_flattened_file(args.input_filename, args.output_filename)    
+    convert_flattened_file(
+            args.input_filename,
+            args.output_filename,
+            args.output_mode)
+
