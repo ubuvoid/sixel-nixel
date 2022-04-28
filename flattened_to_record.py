@@ -9,8 +9,10 @@ import google.protobuf.text_format as text_format
 
 sentinel_linemarker = "\\n"
 
+# TODO Instead of print(), use eprint() as defined in filter_records.
+
 def line_to_recordproto(recordline):
-    # inflate flattened l-n record to a Record proto.
+    # inflate flattened sixel-nixel record to a Record proto.
 
     # rudimentary validation
     if not recordline:
@@ -308,7 +310,7 @@ def line_to_recordproto(recordline):
 
 def convert_stream(instream, outstream, output_mode):
     if output_mode not in ( "textproto", "json" ):
-        eprint("Unrecognized output format")
+        print("Unrecognized output format")
         return None
 
     while True:
