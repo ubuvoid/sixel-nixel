@@ -345,10 +345,10 @@ def convert_flattened_file(input_filename, output_filename, output_mode):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="flattened_to_proto")
+    parser = argparse.ArgumentParser(description="flattened_to_record")
 
     parser.add_argument("input_filename", type=str,
-            help="filename of flattened l-n query text result (one record per "
+            help="filename of flattened query text result (one record per "
             + "line, with escaped newlines).")
 
     parser.add_argument("output_filename", type=str,
