@@ -1,5 +1,6 @@
 syntax = "proto2";
 
+// Columns as they appear in the dataset.
 enum ColumnType {
   COLUMN_TYPE_UNSPECIFIED = 0;
   RECORD_NUMBER = 1;
@@ -10,47 +11,48 @@ enum ColumnType {
 }
 
 message Address {
-  // raw lines of text
+  // Raw lines of text
   repeated string raw_lines = 1;
 
-  // todo record parsed/interpreted address components, if you're into that.
+  // NOTE: In a more robust implementation, we would parse and store the individual
+  // address components here.
 }
 
 message Debtor {
-  // name of debtor, stylized in all caps.
+  // Name of debtor, stylized in all caps.
   // for individuals: SURNAME, FIRST MIDDLE
   optional string name = 1;
 
-  // unique database id of the debtor. only populated when the debtor is an
+  // Unique database id of the debtor. Only populated when the debtor is an
   // individual, unset for corporations.
   optional string lex_id = 2;
 
-  // debtor's address info.
+  // Debtor's address info.
   optional Address address = 3;
 
-  // SURNAME, in all caps. portion of 'name' that comes before the comma.
+  // SURNAME, in all caps. Portion of 'name' that comes before the comma.
   optional string parsed_surname = 4;
 
-  // FIRST MIDDLE (if applicable), in all caps. portion of 'name' after comma.
+  // FIRST MIDDLE (if applicable), in all caps. Portion of 'name' after comma.
   optional string parsed_forenames = 5;
 
 }
 
 message Creditor {
-  //  creditor's name, stylized in all caps.
+  // Creditor's name, stylized in all caps.
   optional string name = 1;
 }
 
 message FilingComponent {
   // ex: "CIVIL JUDGMENT", "STATE TAX WARRANT RELEASE", etc.
-  // todo: define enum.
+  // NOTE: In a more robust implementation, we would define an enum for the possible values.
   optional string category = 1;
 
-  // filing number, as is appears in the text record, as a string.
+  // Filing number, as it appears in the text record, as a string.
   optional string filing_number = 2;
 
   // M/D/YYYY, no leading 0's for month/day less than 10.
-  // todo: clarify why filing_date is present here as well as FilingInfo.
+  // NOTE: A more robust implementation would store a parsed version of the date here as well.
   optional string raw_filing_date = 3;
 
   // ex: "CHATSWORTH MUNICIPAL COURT, CA"
@@ -59,32 +61,34 @@ message FilingComponent {
 
 message FilingInfo {
   // M/D/YYYY, no leading 0's for month/day less than 10.
+  // NOTE: A more robust implementation would store a parsed version of the date here as well.
   optional string raw_filing_date = 1;
 
-  // formatted dollar amount, with preceding "$" and interleaved commas.
-  // todo: parse this.
+  // Formatted dollar amount, with preceding "$" and interleaved commas.
   optional string amount = 2;
 
-  // dollar part of amount, formatted as an integer.
+  // Dollar part of amount, formatted as an integer.
+  // NOTE: All filing amounts in the dataset are whole dollars. If another dataset is acquired
+  // where this is not the case, we would parse the 'cents' component as well and store it here.
   optional int32 amount_usd = 5;
 
-  // populated for filing with a 'STATE TAX WARRANT RELEASE' component.
+  // Populated for filing with a 'STATE TAX WARRANT RELEASE' component.
   optional string certificate_number = 3;
 
-  // one or more individual elements which compose this filing.
+  // One or more individual elements which compose this filing.
   repeated FilingComponent components = 4;
 }
 
 message Record {
   // "No." column header.
   //
-  // not a unique id -- useful only as an index within one particular record set.
-  // a single file may consist of several queries concatenated together, in
+  // Not a unique id -- useful only as an index within one particular record set.
+  // A single file may consist of several queries concatenated together, in
   // which case there may even be redundant record numbers within a single
   // file.
   optional int32 record_num = 1;
 
-  // if set, represents the ordinal sequence number of the record in the file
+  // If set, represents the ordinal sequence number of the record in the file
   // it was imported from.
   optional int32 sequence_no = 5;
 
@@ -95,7 +99,6 @@ message Record {
   optional FilingInfo filing_info = 3; 
 
   // "Creditor" column header.
-  // todo: confirm there can be only one creditor, though there are multiple debtors.
   optional Creditor creditor = 4;
 }
 
