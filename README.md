@@ -23,8 +23,7 @@ python3 flattened_to_record.py test_data/output/sixel-nixel-flattened.actual.txt
 
 # Example usage for pipe-and-filter of records in the shell.
 # This pattern generalizes well to certain deferred execution frameworks.
-# Code fragments can access input data via 'record' (dictionary representing
-json) or 'record_proto' (proto wrapper object)
+# Code fragments can access input data via 'record' (dictionary representing json) or 'record_proto' (proto wrapper object)
 CODEFRAGMENT_EMIT_EVEN_RECORDS="if record['record_num'] %2 == 0: to_emit = True"
 
 # filter json records
