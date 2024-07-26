@@ -1,6 +1,7 @@
 # filter_records.py
 
 import argparse
+import json
 import record_pb2
 import sys
 import google.protobuf.json_format as json_format
@@ -13,9 +14,10 @@ import google.protobuf.text_format as text_format
 #                   [--input_filename INPUT_FILENAME]
 #                   [--output_filename OUTPUT_FILENAME]
 
-# EXEC is a block of python which has access to the locals 'record_proto' and
-# 'to_emit'. EXEC is executed once per input record. if 'to_emit' evaluates to
-# True after the block is run, then the record is included in the output.
+# EXEC is a block of python which has access to the locals 'record_proto',
+# 'record' (a dictionary that serializes to the input json), and 'to_emit'.
+# EXEC is executed once per input record. if 'to_emit' evaluates to True after
+# the block is run, then the record is included in the output.
 #
 # Do *NOT* write to stdout in EXEC.
 #
@@ -49,7 +51,8 @@ def line_to_recordproto(line, input_mode):
 
 def filter_lines(instream, outstream, input_mode, output_mode, args):
     while True:
-        line = instream.readline()
+        # trim whitespace to avoid indent errors in exec() call
+        line = instream.readline().strip()
         if not line:
             break  # end of input.
         record_proto = line_to_recordproto(line, input_mode)
@@ -59,9 +62,16 @@ def filter_lines(instream, outstream, input_mode, output_mode, args):
            eprint("!!! no execution block found !!!")
            return
 
+        # serialize output before calling exec
+        json_str = json_format.MessageToJson(record_proto, indent=None,
+                preserving_proto_field_name=True)
+        textproto_str = text_format.MessageToString(record_proto,
+                as_one_line=True)
+
         exec_locals = {}
         exec_locals['to_emit'] = False
         exec_locals['record_proto'] = record_proto
+        exec_locals['record'] = json.loads(json_str)
 
         exec(string_to_execute, {}, exec_locals)
 
@@ -72,12 +82,9 @@ def filter_lines(instream, outstream, input_mode, output_mode, args):
             line = ""
 
             if output_mode == "textproto":
-                line = text_format.MessageToString(
-                        record_proto, as_one_line=True)
+                line = textproto_str
             elif output_mode == "json":
-                line = json_format.MessageToJson(
-                        record_proto, indent=None,
-                        preserving_proto_field_name=True)
+                line = json_str
             else:
                 eprint("!!! unexpected output_mode: " + output_mode)
                 return

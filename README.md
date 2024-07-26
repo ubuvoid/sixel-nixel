@@ -23,8 +23,9 @@ python3 flattened_to_record.py test_data/output/sixel-nixel-flattened.actual.txt
 
 # Example usage for pipe-and-filter of records in the shell.
 # This pattern generalizes well to certain deferred execution frameworks.
-# If you encounter whitespace errors, remove leading whitespace from the string you pass in. TODO: Trim whitespace when preprocessing input
-CODEFRAGMENT_EMIT_EVEN_RECORDS="if record_proto.record_num %2 == 0: to_emit = True"
+# Code fragments can access input data via 'record' (dictionary representing
+json) or 'record_proto' (proto wrapper object)
+CODEFRAGMENT_EMIT_EVEN_RECORDS="if record['record_num'] %2 == 0: to_emit = True"
 
 # filter json records
 python3 filter_records.py --exec "$CODEFRAGMENT_EMIT_EVEN_RECORDS" --input_filename ./test_data/output/sixel-nixel-testdata.actual.jsonlines --output_filename ./test_data/output/sixel-nixel-testdata.filtered-even.jsonlines
